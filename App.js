@@ -2,6 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 import React, { useState } from 'react';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+ 
+import { NavigationContainer } from '@react-navigation/native';
+
+const Tab = createBottomTabNavigator();
+
 const LogRecord = (props) => {
   return (
     <View style={styles.log}>
@@ -10,26 +16,25 @@ const LogRecord = (props) => {
   )
 };
 
-export default function App() {
+const LogListScreen = (props) => {
   const [text, setText] = useState('');
   const [logs, setLogs] = useState([]);
 
   const logElements = logs.map(log => 
     <LogRecord title={log}></LogRecord>
   )
-
   return (
-    <View style={styles.container}>
+    <View style={styles.centerContent}>
       <View style={styles.topNav}>
-        <Text>Workout Tracker</Text>
+          <Text>Workout Tracker</Text>
       </View>
-      <View style={styles.centerContent}>
+      <View>
         <StatusBar style="auto" />
         {logElements}
       </View>
       <TextInput
         style={{ height: 40 }}
-        placeholder="Type here to translate!"
+        placeholder="Create log"
         onChangeText={newText => setText(newText)}
         defaultValue={text}
       />
@@ -40,16 +45,47 @@ export default function App() {
         }}
         title='create log'
       />
-      <View style={styles.botNav}></View>
-      
-      
     </View>
+  )
+}
+
+const ExerciseListScreen = (props) => {
+  const [exercises, setExercises] = useState(['Bench press', 'Squats', 'Cable rows']);
+
+  const exercisesElements = exercises.map(exercise => 
+    <LogRecord title={exercise}></LogRecord>
+  )
+
+  return (
+    <View>
+      <View style={styles.topNav}>
+          <Text>Exercise List</Text>
+      </View>
+      <View style={styles.centerContent}>
+        {exercisesElements}
+      </View>
+    </View>
+  )
+}
+
+export default function App() {
+  return (
+    // <View style={styles.container}>
+    <NavigationContainer style={{flexDirection: "column"}}>
+      <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Screen name="LogList" component={LogListScreen} />
+        <Tab.Screen name="ExerciseList" component={ExerciseListScreen} />
+        {/* <LogListScreen></LogListScreen> */}
+        {/* <View style={styles.botNav}></View> */}
+      </Tab.Navigator>
+    </NavigationContainer>
+    // </View>
   );
 }
 
 const styles = StyleSheet.create({
   topNav: {
-    flex: 1,
+    height: 100,
     backgroundColor: '#2f3a59',
     alignItems: 'center',
     justifyContent: 'center',
