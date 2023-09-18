@@ -1,1 +1,1 @@
-App to track daily workouts
+App to track daily workouts.
