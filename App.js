@@ -98,28 +98,6 @@ const RoutineListScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
     </View>
-    // <View>
-    //   <View style={styles.topNav}>
-    //     <Text>Routine List</Text>
-    //   </View>
-    //   <View style={styles.centerContent}>
-    //     {routinesElements}
-    //   </View>
-    //   <Button
-    //     onPress={() => {
-    //       // logs.push(text)
-    //       setLogs([...logs, text])
-    //     }}
-    //     title='create record'
-    //   />
-    //   <View style={styles.botNav}>
-    //     {/* <Text>Workout Tracker</Text> */}
-    //     <Button
-    //       title="Log List"
-    //       onPress={() => navigation.navigate('LogList')}
-    //     />
-    //   </View>
-    // </View>
   )
 }
 
