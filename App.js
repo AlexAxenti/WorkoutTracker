@@ -13,6 +13,23 @@ const LogRecord = (props) => {
   return (
     <View style={styles.log}>
       <Text>{props.title}</Text>
+      <Button
+        onPress={() => {
+          fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+            method: 'DELETE',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              "_id": props.id,
+            }),
+          })
+          .then((resp) => props.remove(props.id))
+          .catch((error) => console.error(error))
+        }}
+        title='delete log'
+      />
     </View>
   )
 };
@@ -21,16 +38,19 @@ const LogListScreen = ({ navigation }) => {
   const [text, setText] = useState('');
   const [logs, setLogs] = useState([]);
 
+  removeLog = (id) => {
+    setLogs(logs.filter(log => log._id !== id))
+  }
+
   const logElements = logs.map(log =>
-    <LogRecord title="testing"></LogRecord>
+    <LogRecord title={log.logName} key={log._id} id={log._id} remove={removeLog}></LogRecord>
   )
 
   useEffect(() => {
-    fetch("http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs:7000/logs")
+    fetch("http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs")
       .then((resp) => resp.json())
       .then((json) => setLogs(json))
       .catch((error) => console.error(error))
-      // .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -52,8 +72,22 @@ const LogListScreen = ({ navigation }) => {
           />
           <Button
             onPress={() => {
-              // logs.push(text)
-              setLogs([...logs, text])
+              fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+                method: 'POST',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  "logName": "Testing!",
+                  "logRoutine": "",
+                  "logExercises": [
+                  ]
+                }),
+              })
+              .then((resp) => resp.json())
+              .then((json) => setLogs([...logs, json]))
+              .catch((error) => console.error(error))
             }}
             title='create log'
           />
