@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,8 +22,17 @@ const LogListScreen = ({ navigation }) => {
   const [logs, setLogs] = useState([]);
 
   const logElements = logs.map(log =>
-    <LogRecord title={log}></LogRecord>
+    <LogRecord title="testing"></LogRecord>
   )
+
+  useEffect(() => {
+    fetch("http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs:7000/logs")
+      .then((resp) => resp.json())
+      .then((json) => setLogs(json))
+      .catch((error) => console.error(error))
+      // .finally(() => setLoading(false));
+  }, []);
+
   return (
     <View style={styles.outerScreenLayout}>
       <View style={styles.topNav}>
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   botNav: {
-    flex: 1,
+    flex: 1, 
     backgroundColor: '#2f3a59',
     alignItems: 'center',
     justifyContent: 'center',
@@ -135,6 +144,7 @@ const styles = StyleSheet.create({
   },
   botNavButton: {
     flex: 1,
+    height: "100%",
     alignItems: 'center',
     justifyContent: 'center'
   },
