@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import stylesSheet from './styles.js'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,26 +11,35 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const LogRecord = (props) => {
+  let deleteLog = () => {
+    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "_id": props.log._id,
+      }),
+    })
+    .then((resp) => props.remove(props.log._id))
+    .catch((error) => console.error(error))
+  }
+
   return (
     <View style={styles.log}>
-      <Text>{props.title}</Text>
-      <Button
-        onPress={() => {
-          fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
-            method: 'DELETE',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              "_id": props.id,
-            }),
-          })
-          .then((resp) => props.remove(props.id))
-          .catch((error) => console.error(error))
-        }}
-        title='delete log'
-      />
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View>
+          <Text>{props.log.logName} - {props.log.logDate}</Text>
+          <Text>{props.log.logRoutine}</Text>
+        </View>
+        <View style={{marginLeft: 'auto'}}>
+          <Button
+            onPress={() => {deleteLog()}}
+            title='delete log'
+          />
+        </View>
+      </View>
     </View>
   )
 };
@@ -38,12 +48,13 @@ const LogListScreen = ({ navigation }) => {
   const [text, setText] = useState('');
   const [logs, setLogs] = useState([]);
 
-  removeLog = (id) => {
+  let removeLog = (id) => {
+    console.log("Removing ", id)
     setLogs(logs.filter(log => log._id !== id))
   }
 
   const logElements = logs.map(log =>
-    <LogRecord title={log.logName} key={log._id} id={log._id} remove={removeLog}></LogRecord>
+    <LogRecord key={log._id} log={log} remove={removeLog}></LogRecord>
   )
 
   useEffect(() => {
@@ -52,6 +63,25 @@ const LogListScreen = ({ navigation }) => {
       .then((json) => setLogs(json))
       .catch((error) => console.error(error))
   }, []);
+
+  let createLog = () => {
+    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "logName": "Testing!",
+        "logRoutine": "",
+        "logExercises": [
+        ]
+      }),
+    })
+    .then((resp) => resp.json())
+    .then((json) => setLogs([...logs, json]))
+    .catch((error) => console.error(error))
+  }
 
   return (
     <View style={styles.outerScreenLayout}>
@@ -71,24 +101,7 @@ const LogListScreen = ({ navigation }) => {
             defaultValue={text}
           />
           <Button
-            onPress={() => {
-              fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
-                method: 'POST',
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  "logName": "Testing!",
-                  "logRoutine": "",
-                  "logExercises": [
-                  ]
-                }),
-              })
-              .then((resp) => resp.json())
-              .then((json) => setLogs([...logs, json]))
-              .catch((error) => console.error(error))
-            }}
+            onPress={() => {createLog()}}
             title='create log'
           />
         </View>
@@ -110,7 +123,10 @@ const RoutineListScreen = ({ navigation }) => {
   const [routines, setRoutines] = useState(['test']);
 
   const routineElements = routines.map(routine =>
-    <LogRecord title={routine}></LogRecord>
+    // <LogRecord title={routine}></LogRecord>
+    <View>
+      <Text>Test</Text>
+    </View>
   )
 
   return (
@@ -158,49 +174,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  outerScreenLayout: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  topNav: {
-    height: 100,
-    backgroundColor: '#2f3a59',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  botNav: {
-    flex: 1, 
-    backgroundColor: '#2f3a59',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row'
-  },
-  botNavButton: {
-    flex: 1,
-    height: "100%",
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  centerContent: {
-    // backgroundColor: '#b2bbd6',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    flex: 6,
-  },
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-    // backgroundColor: '#fff',
-  },
-  log: {
-    backgroundColor: 'green',
-    height: 50,
-    marginTop: 3,
-    borderTopColor: 'black',
-    borderTopWidth: 2,
-    borderBottomColor: 'black',
-    borderBottomWidth: 2,
-    // backgroundColor: '#fff',
-  },
-});
+const styles = stylesSheet;
