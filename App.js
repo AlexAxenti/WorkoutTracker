@@ -45,7 +45,6 @@ const LogRecord = (props) => {
 };
 
 const LogListScreen = ({ navigation }) => {
-  const [text, setText] = useState('');
   const [logs, setLogs] = useState([]);
 
   let removeLog = (id) => {
@@ -94,12 +93,6 @@ const LogListScreen = ({ navigation }) => {
           {logElements}
         </View>
         <View style={{marginTop: 'auto'}}>
-          <TextInput
-            style={{ height: 40 }}
-            placeholder="Create log"
-            onChangeText={newText => setText(newText)}
-            defaultValue={text}
-          />
           <Button
             onPress={() => {createLog()}}
             title='create log'
