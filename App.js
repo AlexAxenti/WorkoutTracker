@@ -1,8 +1,8 @@
 import React from 'react'
 import stylesSheet from './styles.js'
 
-import LogListScreen from './Logs.js'
-import { RoutineListScreen, CreateRoutineScreen } from './Routines.js'
+import LogListScreen from './components/Logs.js'
+import { RoutineListScreen, CreateRoutineScreen } from './components/Routines.js'
 
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'

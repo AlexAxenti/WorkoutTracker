@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import stylesSheet from './styles.js'
+import stylesSheet from '../styles.js'
 
 const LogRecord = (props) => {
   let deleteLog = () => {

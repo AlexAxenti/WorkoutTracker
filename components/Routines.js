@@ -1,6 +1,6 @@
 import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import stylesSheet from './styles.js'
+import stylesSheet from '../styles.js'
 
 const RoutineListScreen = ({ navigation }) => {
   const [routines, setRoutines] = useState(['test']);
@@ -128,4 +128,4 @@ const CreateRoutineScreen = ({ navigation }) => {
 
 const styles = stylesSheet;
 
-export { RoutineListScreen as RoutineListScreen, CreateRoutineScreen as CreateRoutineScreen }
+export { RoutineListScreen, CreateRoutineScreen }
