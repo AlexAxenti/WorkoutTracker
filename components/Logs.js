@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import stylesSheet from '../styles.js'
+import BotNav from './BotNav.js';
 
 const LogRecord = (props) => {
   let deleteLog = () => {
@@ -21,27 +22,26 @@ const LogRecord = (props) => {
 
   return (
     <View style={styles.log}>
-    <View style={{flex: 1, flexDirection: 'row'}}>
-      <View>
-      <Text>{props.log.logName} - {props.log.logDate}</Text>
-      <Text>{props.log.logRoutine}</Text>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View>
+        <Text>{props.log.logName} - {props.log.logDate}</Text>
+        <Text>{props.log.logRoutine}</Text>
+        </View>
+        <View style={{marginLeft: 'auto'}}>
+        <Button
+          onPress={() => {deleteLog()}}
+          title='Delete Log'
+        />
+        </View>
       </View>
-      <View style={{marginLeft: 'auto'}}>
-      <Button
-        onPress={() => {deleteLog()}}
-        title='delete log'
-      />
-      </View>
-    </View>
     </View>
   )
-  };
+};
 
 const LogListScreen = ({ navigation }) => {
   const [logs, setLogs] = useState([]);
 
   let removeLog = (id) => {
-    console.log("Removing ", id)
     setLogs(logs.filter(log => log._id !== id))
   }
 
@@ -77,33 +77,25 @@ const LogListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.outerScreenLayout}>
-    <View style={styles.topNav}>
-      <Text>Workout Tracker</Text>
-    </View>
-    <View style={styles.centerContent}> 
-      <View>
-      <StatusBar style="auto" />
-      {logElements}
+      <View style={styles.topNav}>
+        <Text>Workout Tracker</Text>
       </View>
-      <View style={{marginTop: 'auto'}}>
-      <Button
-        onPress={() => {createLog()}}
-        title='create log'
-      />
+      <View style={styles.centerContent}> 
+        <View>
+        <StatusBar style="auto" />
+        {logElements}
+        </View>
+        <View style={{marginTop: 'auto'}}>
+        <Button
+          onPress={() => {createLog()}}
+          title='Create Log'
+        />
+        </View>
       </View>
-    </View>
-    <View style={styles.botNav}>
-      {/* <Text>Workout Tracker</Text> */}
-      <TouchableOpacity style={styles.botNavButton} onPress={() => navigation.navigate('LogList')}>
-      <Text>Log List</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.botNavButton} onPress={() => navigation.navigate('RoutineList')}>
-      <Text>RoutineList</Text>
-      </TouchableOpacity>
-    </View>
+      <BotNav navigation={navigation}></BotNav>
     </View>
   )
-  }
+}
 
 const styles = stylesSheet;
 
