@@ -13,7 +13,7 @@ const RoutineListScreen = ({ navigation }) => {
   }
 
   const routineElements = routines.map(routine =>
-    <RoutineRecord key={routine._id} routine={routine} remove={removeRoutine}></RoutineRecord>
+    <RoutineRecord key={routine._id} routine={routine} remove={removeRoutine} navigation={navigation}></RoutineRecord>
   )
 
   let getRoutines = () => {
@@ -68,7 +68,8 @@ const RoutineRecord = (props) => {
   }
 
   return (
-    <View style={styles.log}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('RoutinePage', { routine: props.routine })} style={styles.log}>
+    {/* <View style={styles.log}> */}
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View>
           <Text>{props.routine.routineName}</Text>
@@ -80,7 +81,8 @@ const RoutineRecord = (props) => {
           />
         </View>
       </View>
-    </View>
+    {/* </View> */}
+    </TouchableOpacity>
   )
 };
 
