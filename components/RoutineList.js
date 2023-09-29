@@ -40,7 +40,7 @@ const RoutineListScreen = ({ navigation }) => {
           <Button
             onPress={() => {
               // logs.push(text)
-              navigation.navigate('CreateRoutine')
+              navigation.navigate('Routine', { routine: {}, creating: true })
             }}
             title='Create Routine'
           />
@@ -68,8 +68,7 @@ const RoutineRecord = (props) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('RoutinePage', { routine: props.routine })} style={styles.log}>
-    {/* <View style={styles.log}> */}
+    <TouchableOpacity onPress={() => props.navigation.navigate('Routine', { routine: props.routine, creating: false, })} style={styles.log}>
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View>
           <Text>{props.routine.routineName}</Text>
@@ -81,7 +80,6 @@ const RoutineRecord = (props) => {
           />
         </View>
       </View>
-    {/* </View> */}
     </TouchableOpacity>
   )
 };

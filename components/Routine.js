@@ -1,24 +1,41 @@
 import { Text, View, TextInput, Button } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import stylesSheet from '../styles.js'
 import BotNav from './BotNav.js';
 
-const CreateRoutineScreen = ({ navigation }) => {
-  const [routineName, setRoutineName] = useState('');
-  const [routineExercises, setRoutineExercises] = useState([])
+const RoutineScreen = ({ route, navigation }) => {
+  const routine = route.params.routine;
+  const creatingRoutine = route.params.creating;
+
+  const [routineName, setRoutineName] = useState(creatingRoutine ? '' : routine.routineName);
+  const [routineExercises, setRoutineExercises] = useState(creatingRoutine ? [] : routine.routineExercises)
+
+  useEffect(() => {
+    console.log("Creating? ", creatingRoutine)
+    console.log("Routine: ", routine)
+  }, []);
 
   let createRoutine = () => {
     console.log(routineName, routineExercises)
+    let method = creatingRoutine ? 'POST' : 'PUT'
+    let body = {
+      "routineName": routineName,
+      "routineExercises": routineExercises,
+    }
+
+    if (!creatingRoutine) {
+      body._id = routine._id
+
+      console.log(body)
+    }
+    
     fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines', {
-      method: 'POST',
+      method: method,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        "routineName": routineName,
-        "routineExercises": routineExercises,
-      }),
+      body: JSON.stringify(body),
     })
       .then((resp) => navigation.goBack())
       .catch((error) => console.error(error))
@@ -69,7 +86,7 @@ const CreateRoutineScreen = ({ navigation }) => {
               style={{ height: 40 }}
               placeholder="Routine Name"
               onChangeText={newText => setRoutineName(newText)}
-              defaultValue=''
+              defaultValue={routineName}
             />
           </View>
           <Text>Exercises:</Text>
@@ -93,7 +110,7 @@ const CreateRoutineScreen = ({ navigation }) => {
             onPress={() => {
               createRoutine()
             }}
-            title='Create Routine'
+            title={creatingRoutine ? 'Create Routine' : 'Save Routine'}
           />
         </View>
       </View>
@@ -120,4 +137,4 @@ const ExerciseElement = (props) => {
 
 const styles = stylesSheet;
 
-export default CreateRoutineScreen 
+export default RoutineScreen 
