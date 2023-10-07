@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Button, TouchableOpacity } from 'react-native';
+import { Text, View, Button, TouchableOpacity, Modal } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import stylesSheet from '../styles.js'
 import BotNav from './BotNav.js';
@@ -39,6 +39,7 @@ const LogRecord = (props) => {
 };
 
 const LogListScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [logs, setLogs] = useState([]);
 
   let removeLog = (id) => {
@@ -86,10 +87,11 @@ const LogListScreen = ({ navigation }) => {
         {logElements}
         </View>
         <View style={{marginTop: 'auto'}}>
-        <Button
-          onPress={() => {createLog()}}
-          title='Create Log'
-        />
+          <Button
+            // onPress={() => createLog()}
+            onPress={() => navigation.navigate('CreateLog', { log: {}, creating: true })}
+            title='Create Log'
+          />
         </View>
       </View>
       <BotNav navigation={navigation}></BotNav>
