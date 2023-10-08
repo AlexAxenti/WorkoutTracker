@@ -25,8 +25,6 @@ const RoutineScreen = ({ route, navigation }) => {
 
     if (!creatingRoutine) {
       body._id = routine._id
-
-      console.log(body)
     }
     
     fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines', {
