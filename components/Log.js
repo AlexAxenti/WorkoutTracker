@@ -6,71 +6,72 @@ import BotNav from './BotNav.js';
 const LogScreen = ({ route, navigation }) => {
   const log = route.params.log;
   const creatingLog = route.params.creating;
+  const routine = route.params.routine;
 
-  // const [routineName, setRoutineName] = useState(creatingRoutine ? '' : routine.routineName);
-  // const [routineExercises, setRoutineExercises] = useState(creatingRoutine ? [] : routine.routineExercises)
+  const [logName, setLogName] = useState(creatingLog ? '' : log.logName);
+  const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
+  const [logExercises, setLogExercises] = useState(creatingLog ? routine.routineExercises : log.logExercises)
 
-  // useEffect(() => {
-  //   getRoutines()
-  // }, []);
+  useEffect(() => {
+    console.log(routine)
+  }, []);
 
-  // let createRoutine = () => {
-  //   console.log(routineName, routineExercises)
-  //   let method = creatingRoutine ? 'POST' : 'PUT'
-  //   let body = {
-  //     "routineName": routineName,
-  //     "routineExercises": routineExercises,
-  //   }
+  let createLog = () => {
+    let method = creatingLog ? 'POST' : 'PUT'
+    let body = {
+      "logName": logName,
+      "logRoutine": routineName,
+      "logExercises": logExercises,
+    }
 
-  //   if (!creatingRoutine) {
-  //     body._id = routine._id
+    if (!creatingLog) {
+      body._id = log._id
+    }
+    console.log(body)
+    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+      method: method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+    .then((resp) => navigation.navigate('LogList'))
+    .catch((error) => console.error(error))
+  }
 
-  //     console.log(body)
-  //   }
-    
-  //   fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines', {
-  //     method: method,
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(body),
-  //   })
-  //     .then((resp) => navigation.goBack())
-  //     .catch((error) => console.error(error))
-  // }
+  let editExercise = (exerciseName, exerciseIndex) => {
+    const newExercises = logExercises.map((e, i) => {
+      if (i === exerciseIndex) {
+        return exerciseName
+      } else {
+        return e
+      }
+    })
+    setLogExercises(newExercises)
+  }
 
-  // let editExercise = (exerciseName, exerciseIndex) => {
-  //   const newExercises = routineExercises.map((e, i) => {
-  //     if (i === exerciseIndex) {
-  //       return exerciseName
-  //     } else {
-  //       return e
-  //     }
-  //   })
-  //   setRoutineExercises(newExercises)
-  // }
-
-  // let removeExercise = (exerciseIndex) => {
-  //   const newExercises = routineExercises.filter((e, i) => i !== exerciseIndex);
-  //   setRoutineExercises(newExercises)
-  // }
+  let removeExercise = (exerciseIndex) => {
+    const newExercises = logExercises.filter((e, i) => i !== exerciseIndex);
+    setLogExercises(newExercises)
+  }
 
   // Render each exercise
-  // const exerciseElements = routineExercises.map((exercise, index) =>
-  //   <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-  //     <ExerciseElement editExercise={editExercise} exerciseIndex={index} exerciseName={exercise}></ExerciseElement>
-  //     <View>
-  //       <Button
-  //         onPress={() => {
-  //           removeExercise(index)
-  //         }}
-  //         title='X'
-  //         style={{ marginLeft: 'auto' }}
-  //       />
-  //     </View>
-  //   </View>
-  // )
+  const exerciseElements = logExercises.map((exercise, index) =>
+    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <ExerciseElement editExercise={editExercise} exerciseIndex={index} exercise={exercise}></ExerciseElement>
+      {/* <ExerciseElement exerciseIndex={index} exerciseName={exercise}></ExerciseElement> */}
+      <View>
+        <Button
+          onPress={() => {
+            removeExercise(index)
+          }}
+          title='X'
+          style={{ marginLeft: 'auto' }}
+        />
+      </View>
+    </View>
+  )
 
   return (
     <View style={styles.outerScreenLayout}>
@@ -79,24 +80,28 @@ const LogScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.centerContent}>
         <View>
-          {/* <View style={{flexDirection: 'row'}}>
-            <Text style={{marginTop: 'auto', marginBottom: 'auto', marginRight: 5}}>Routine Name:</Text>
+          <Text>
+            Routine: {routineName}
+          </Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={{marginTop: 'auto', marginBottom: 'auto', marginRight: 5}}>Log Name:</Text>
             <TextInput
               style={{ height: 40 }}
-              placeholder="Routine Name"
-              onChangeText={newText => setRoutineName(newText)}
-              defaultValue={routineName}
+              placeholder="Log Name"
+              onChangeText={newText => setLogName(newText)}
+              defaultValue={logName}
             />
-          </View> */}
-          {/* <Text>Exercises:</Text>
+          </View>
+          
+          <Text>Exercises:</Text>
           {exerciseElements}
           <Button
             onPress={() => {
               // logs.push(text)
-              setRoutineExercises([...routineExercises, ''])
+              setLogExercises([...logExercises, ''])
             }}
             title='Add Exercise'
-          /> */}
+          />
         </View>
         <View style={{ marginTop: 'auto', flexDirection: 'row', justifyContent: 'space-around' }}>
           <Button
@@ -107,7 +112,7 @@ const LogScreen = ({ route, navigation }) => {
           />
           <Button
             onPress={() => {
-              // createRoutine()
+              createLog()
             }}
             title={creatingLog ? 'Create Log' : 'Save Log'}
           />
@@ -118,21 +123,21 @@ const LogScreen = ({ route, navigation }) => {
   )
 }
 
-// const ExerciseElement = (props) => {
-//   return (
-//     <View style={{ flexDirection: 'row' }}>
-//       <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name:</Text>
-//       <TextInput
-//         style={{ height: 40 }}
-//         placeholder="Exercise Name"
-//         onChangeText={newText => {
-//           props.editExercise(newText, props.exerciseIndex)
-//         }}
-//         defaultValue={props.exerciseName}
-//       />
-//     </View>
-//   )
-// }
+const ExerciseElement = (props) => {
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name:</Text>
+      <TextInput
+        style={{ height: 40 }}
+        placeholder="Exercise Name"
+        onChangeText={newText => {
+          props.editExercise({ exerciseName: newText }, props.exerciseIndex)
+        }}
+        defaultValue={props.exercise.exerciseName}
+      />
+    </View>
+  )
+}
 
 const styles = stylesSheet;
 

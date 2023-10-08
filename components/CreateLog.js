@@ -5,13 +5,9 @@ import BotNav from './BotNav.js';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const CreateLogScreen = ({ navigation }) => {
-  // const [routineName, setRoutineName] = useState(creatingRoutine ? '' : routine.routineName);
-  // const [routineExercises, setRoutineExercises] = useState(creatingRoutine ? [] : routine.routineExercises)
-
-  // const [routines, setRoutines] = useState([])
   const [open, setOpen] = useState(false);
   const [dropDownItems, setDropDownItems] = useState([])
-  const [value, setValue] = useState({})
+  const [value, setValue] = useState({ routineName: 'None', routineExercises: [] })
 
   let getRoutines = () => {
     fetch("http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines")
@@ -23,9 +19,13 @@ const CreateLogScreen = ({ navigation }) => {
   }
 
   let formatDropDownItems = json => {
-    let items = [{label: 'None', value: {}}]
+    let items = [{ label: 'None', value: { routineName: 'None', routineExercises: [] } }]
     json.map(routine => {
-      items.push({label: routine.routineName, value: routine})
+      let routineExercises = []
+      routine.routineExercises.map(exercise => {
+        routineExercises.push({ exerciseName: exercise })
+      })
+      items.push({label: routine.routineName, value: {routineName: routine.routineName, routineExercises: routineExercises}})
     })
     setDropDownItems(items)
   }
@@ -61,7 +61,8 @@ const CreateLogScreen = ({ navigation }) => {
           />
           <Button
             onPress={() => {
-              navigation.navigate('Log', { log: value, creating: true })
+              console.log(value)
+              navigation.navigate('Log', { log: {}, routine: value, creating: true })
             }}
             title='Select Routine'
           />
