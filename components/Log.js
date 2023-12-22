@@ -1,4 +1,4 @@
-import { Text, View, TextInput, Button } from 'react-native';
+import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import stylesSheet from '../styles.js'
 import BotNav from './BotNav.js';
@@ -58,16 +58,17 @@ const LogScreen = ({ route, navigation }) => {
 
   // Render each exercise
   const exerciseElements = logExercises.map((exercise, index) =>
-    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <ExerciseElement editExercise={editExercise} exerciseIndex={index} exercise={exercise}></ExerciseElement>
-      {/* <ExerciseElement exerciseIndex={index} exerciseName={exercise}></ExerciseElement> */}
+    // <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View key={index} style={{ flexDirection: 'row' }}>
+      <View style={{flex: 1}}>
+        <ExerciseElement editExercise={editExercise} exerciseIndex={index} exercise={exercise} logId={log._id} navigation={navigation}></ExerciseElement>
+      </View>
       <View>
         <Button
           onPress={() => {
             removeExercise(index)
           }}
           title='X'
-          style={{ marginLeft: 'auto' }}
         />
       </View>
     </View>
@@ -92,7 +93,6 @@ const LogScreen = ({ route, navigation }) => {
               defaultValue={logName}
             />
           </View>
-          
           <Text>Exercises:</Text>
           {exerciseElements}
           <Button
@@ -125,7 +125,7 @@ const LogScreen = ({ route, navigation }) => {
 
 const ExerciseElement = (props) => {
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, log: props.logId })} style={{ flexDirection: 'row' }}>
       <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name:</Text>
       <TextInput
         style={{ height: 40 }}
@@ -135,7 +135,7 @@ const ExerciseElement = (props) => {
         }}
         defaultValue={props.exercise.exerciseName}
       />
-    </View>
+    </TouchableOpacity>
   )
 }
 

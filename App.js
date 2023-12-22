@@ -6,6 +6,7 @@ import RoutineListScreen from './components/RoutineList.js'
 import RoutineScreen from './components/Routine.js'
 import CreateLogScreen from './components/CreateLog.js'
 import LogScreen from './components/Log.js'
+import ExerciseScreen from './components/Exercise.js'
 
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Screen name="Routine" component={RoutineScreen} />
         <Stack.Screen name="CreateLog" component={CreateLogScreen} />
         <Stack.Screen name="Log" component={LogScreen} />
+        <Stack.Screen name="Exercise" component={ExerciseScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
