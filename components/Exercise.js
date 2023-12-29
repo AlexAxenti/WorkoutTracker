@@ -11,8 +11,34 @@ const ExerciseScreen = ({ route, navigation }) => {
   const [exerciseSets, setExerciseSets] = useState(exercise.sets)
 
   useEffect(() => {
-    console.log(exercise)
+    console.log(route.params)
   }, []);
+
+  let updateExercise = () => {
+    let method = 'PUT'
+    let body = {
+      "logId": logId,
+      "exerciseId": exercise._id,
+      "exerciseName": exerciseName,
+      "sets": exerciseSets,
+    }
+
+    console.log(body)
+    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/exercise', {
+    fetch('http://localhost:7000/logs/exercise', {
+      method: method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((resp) => {
+        route.params.onGoBack({exerciseName: exerciseName, sets: exerciseSets, _id: exercise._id}, route.params.exerciseIndex)
+        navigation.goBack()
+      })
+      .catch((error) => console.error(error))
+  }
 
   let editSet = (set) => {
     const newSets = exerciseSets.map((e, i) => {
@@ -82,7 +108,7 @@ const ExerciseScreen = ({ route, navigation }) => {
           <Button
             onPress={() => {
               // createLog()
-              console.log(exerciseSets)
+              updateExercise()
             }}
             title={'Save Exercise'}
           />
@@ -106,6 +132,7 @@ const SetElement = (props) => {
           set.weight = newText
           props.editSet(set)
         }}
+        defaultValue={set.weight}
         keyboardType={'numeric'}
       />
       <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Reps:</Text>
@@ -116,6 +143,8 @@ const SetElement = (props) => {
           set.reps = newText
           props.editSet(set)
         }}
+        defaultValue={set.reps}
+        keyboardType={'numeric'}
       />
     </View>
   )

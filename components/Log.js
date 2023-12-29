@@ -2,18 +2,20 @@ import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import stylesSheet from '../styles.js'
 import BotNav from './BotNav.js';
+import { useIsFocused } from '@react-navigation/native';
 
 const LogScreen = ({ route, navigation }) => {
   const log = route.params.log;
   const creatingLog = route.params.creating;
   const routine = route.params.routine;
+  const routineName = creatingLog ? routine.routineName : log.logRoutine
 
   const [logName, setLogName] = useState(creatingLog ? '' : log.logName);
-  const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
+  // const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
   const [logExercises, setLogExercises] = useState(creatingLog ? routine.routineExercises : log.logExercises)
 
   useEffect(() => {
-    console.log(routine)
+    console.log(log)
   }, []);
 
   let createLog = () => {
@@ -40,10 +42,10 @@ const LogScreen = ({ route, navigation }) => {
     .catch((error) => console.error(error))
   }
 
-  let editExercise = (exerciseName, exerciseIndex) => {
+  let editExercise = (exercise, exerciseIndex) => {
     const newExercises = logExercises.map((e, i) => {
       if (i === exerciseIndex) {
-        return exerciseName
+        return exercise
       } else {
         return e
       }
@@ -77,7 +79,7 @@ const LogScreen = ({ route, navigation }) => {
   return (
     <View style={styles.outerScreenLayout}>
       <View style={styles.topNav}>
-        <Text>Create Log</Text>
+        <Text>{creatingLog ? 'Create Log' : 'Edit Log'}</Text>
       </View>
       <View style={styles.centerContent}>
         <View>
@@ -125,14 +127,14 @@ const LogScreen = ({ route, navigation }) => {
 
 const ExerciseElement = (props) => {
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, log: props.logId })} style={{ flexDirection: 'row' }}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, logId: props.logId, onGoBack: props.editExercise, exerciseIndex: props.exerciseIndex })} style={{ flexDirection: 'row' }}>
       <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name:</Text>
       <TextInput
         style={{ height: 40 }}
         placeholder="Exercise Name"
-        onChangeText={newText => {
-          props.editExercise({ exerciseName: newText }, props.exerciseIndex)
-        }}
+        // onChangeText={newText => {
+        //   props.editExercise({ exerciseName: newText }, props.exerciseIndex)
+        // }}
         defaultValue={props.exercise.exerciseName}
       />
     </TouchableOpacity>

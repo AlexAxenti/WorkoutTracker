@@ -28,24 +28,24 @@ const LogListScreen = ({ navigation }) => {
     isFocused && getLogs()
   }, [isFocused]);
 
-  let createLog = () => {
-    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      "logName": "Testing!",
-      "logRoutine": "",
-      "logExercises": [
-      ]
-    }),
-    })
-    .then((resp) => resp.json())
-    .then((json) => setLogs([...logs, json]))
-    .catch((error) => console.error(error))
-  }
+  // let createLog = () => {
+  //   fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+  //   method: 'POST',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     "logName": "Testing!",
+  //     "logRoutine": "",
+  //     "logExercises": [
+  //     ]
+  //   }),
+  //   })
+  //   .then((resp) => resp.json())
+  //   .then((json) => setLogs([...logs, json]))
+  //   .catch((error) => console.error(error))
+  // }
 
   return (
     <View style={styles.outerScreenLayout}>
