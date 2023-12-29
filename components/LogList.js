@@ -87,7 +87,7 @@ const LogRecord = (props) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('Log', { log: props.log, creating: false, })} style={styles.log}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('Log', { logId: props.log._id, creating: false, })} style={styles.log}>
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View>
           <Text>{props.log.logName} - {props.log.logDate}</Text>

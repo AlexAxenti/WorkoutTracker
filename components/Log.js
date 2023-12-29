@@ -5,18 +5,39 @@ import BotNav from './BotNav.js';
 import { useIsFocused } from '@react-navigation/native';
 
 const LogScreen = ({ route, navigation }) => {
-  const log = route.params.log;
+  const logId = route.params.logId;
   const creatingLog = route.params.creating;
   const routine = route.params.routine;
-  const routineName = creatingLog ? routine.routineName : log.logRoutine
+  // const routineName = creatingLog ? routine.routineName : log.logRoutine
 
-  const [logName, setLogName] = useState(creatingLog ? '' : log.logName);
-  // const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
-  const [logExercises, setLogExercises] = useState(creatingLog ? routine.routineExercises : log.logExercises)
+  // const [logName, setLogName] = useState(creatingLog ? '' : log.logName);
+  // // const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
+  // const [logExercises, setLogExercises] = useState(creatingLog ? routine.routineExercises : log.logExercises)
+
+  //Remake
+  const [routineName, setRoutineName] = useState('')
+  const [log, setLog] = useState({});
+  const [logName, setLogName] = useState('');
+  const [logExercises, setLogExercises] = useState([])
+  const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log(log)
-  }, []);
+    isFocused && getLog()
+  }, [isFocused]);
+
+  let getLog = () => {
+    // fetch(`http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/${logId}`)
+    fetch(`http://localhost:7000/logs/${logId}`)
+      .then((resp) => resp.json())
+      .then((json) => {
+        setLog(json)
+        setLogName(json.logName)
+        setRoutineName(json.logRoutine)
+        setLogExercises(json.logExercises)
+        console.log(json)
+      })
+      .catch((error) => console.error(error))
+  }
 
   let createLog = () => {
     let method = creatingLog ? 'POST' : 'PUT'

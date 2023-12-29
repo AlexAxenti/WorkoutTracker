@@ -18,6 +18,28 @@ const CreateLogScreen = ({ navigation }) => {
       .catch((error) => console.error(error))
   }
 
+  let createLog = () => {
+    let method = 'POST'
+    let body = {
+      "logName": value.routineName == 'None' ? '' : value.routineName,
+      "logRoutine": value.routineName == 'None' ? '' : value.routineName
+    }
+
+    console.log(body)
+    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+    fetch('http://localhost:7000/logs', {
+      method: method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(resp => resp.json())
+      .then(resp => navigation.navigate('Log', { log: resp })) //('Log', { logId: resp.body.logId })
+      .catch((error) => console.error(error))
+  }
+
   let formatDropDownItems = json => {
     let items = [{ label: 'None', value: { routineName: 'None', routineExercises: [] } }]
     json.map(routine => {
@@ -62,9 +84,10 @@ const CreateLogScreen = ({ navigation }) => {
           <Button
             onPress={() => {
               console.log(value)
-              navigation.navigate('Log', { log: {}, routine: value, creating: true })
+              // navigation.navigate('Log', { log: {}, routine: value, creating: true })
+              createLog()
             }}
-            title='Select Routine'
+            title='Create Log'
           />
         </View>
       </View>
