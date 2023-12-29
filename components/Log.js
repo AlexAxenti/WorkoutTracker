@@ -20,8 +20,8 @@ const LogScreen = ({ route, navigation }) => {
   }, [isFocused]);
 
   let getLog = () => {
-    // fetch(`http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/${logId}`)
-    fetch(`http://localhost:7000/logs/${logId}`)
+    fetch(`http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/${logId}`)
+    // fetch(`http://localhost:7000/logs/${logId}`)
       .then((resp) => resp.json())
       .then((json) => {
         setLog(json)

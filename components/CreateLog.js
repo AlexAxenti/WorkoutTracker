@@ -26,8 +26,8 @@ const CreateLogScreen = ({ navigation }) => {
     }
 
     console.log(body)
-    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
-    fetch('http://localhost:7000/logs', {
+    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+    // fetch('http://localhost:7000/logs', {
       method: method,
       headers: {
         Accept: 'application/json',

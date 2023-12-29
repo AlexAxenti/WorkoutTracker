@@ -23,8 +23,8 @@ const ExerciseScreen = ({ route, navigation }) => {
       "sets": exerciseSets,
     }
 
-    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/exercise', {
-    fetch('http://localhost:7000/logs/exercise', {
+    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/exercise', {
+    // fetch('http://localhost:7000/logs/exercise', {
       method: method,
       headers: {
         Accept: 'application/json',
