@@ -11,7 +11,7 @@ const ExerciseScreen = ({ route, navigation }) => {
   const [exerciseSets, setExerciseSets] = useState(exercise.sets)
 
   useEffect(() => {
-    console.log(route.params)
+    // console.log(route.params)
   }, []);
 
   let updateExercise = () => {
@@ -23,7 +23,6 @@ const ExerciseScreen = ({ route, navigation }) => {
       "sets": exerciseSets,
     }
 
-    console.log(body)
     // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs/exercise', {
     fetch('http://localhost:7000/logs/exercise', {
       method: method,
@@ -34,7 +33,6 @@ const ExerciseScreen = ({ route, navigation }) => {
       body: JSON.stringify(body),
     })
       .then((resp) => {
-        route.params.onGoBack({exerciseName: exerciseName, sets: exerciseSets, _id: exercise._id}, route.params.exerciseIndex)
         navigation.goBack()
       })
       .catch((error) => console.error(error))
@@ -51,19 +49,19 @@ const ExerciseScreen = ({ route, navigation }) => {
     setExerciseSets(newSets)
   }
 
-  // let removeExercise = (exerciseIndex) => {
-  //   const newExercises = logExercises.filter((e, i) => i !== exerciseIndex);
-  //   setLogExercises(newExercises)
-  // }
+  let removeSet = (setIndex) => {
+    const newSets = exerciseSets.filter((e, i) => i !== setIndex);
+    setExerciseSets(newSets)
+  }
 
-  // Render each exercise
+  // Render each set
   const setElements = exerciseSets.map((set, index) =>
     <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
       <SetElement set={set} editSet={editSet}></SetElement>
       <View>
         <Button
           onPress={() => {
-            // removeExercise(index)
+            removeSet(index)
           }}
           title='X'
           style={{ marginLeft: 'auto' }}

@@ -36,7 +36,7 @@ const CreateLogScreen = ({ navigation }) => {
       body: JSON.stringify(body),
     })
       .then(resp => resp.json())
-      .then(resp => navigation.navigate('Log', { log: resp })) //('Log', { logId: resp.body.logId })
+      .then(resp => navigation.navigate('Log', { logId: resp })) //('Log', { logId: resp.body.logId })
       .catch((error) => console.error(error))
   }
 

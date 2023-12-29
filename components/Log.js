@@ -7,12 +7,6 @@ import { useIsFocused } from '@react-navigation/native';
 const LogScreen = ({ route, navigation }) => {
   const logId = route.params.logId;
   const creatingLog = route.params.creating;
-  const routine = route.params.routine;
-  // const routineName = creatingLog ? routine.routineName : log.logRoutine
-
-  // const [logName, setLogName] = useState(creatingLog ? '' : log.logName);
-  // // const [routineName, setRoutineName] = useState(creatingLog ? routine.routineName : log.logRoutine)
-  // const [logExercises, setLogExercises] = useState(creatingLog ? routine.routineExercises : log.logExercises)
 
   //Remake
   const [routineName, setRoutineName] = useState('')
@@ -34,23 +28,19 @@ const LogScreen = ({ route, navigation }) => {
         setLogName(json.logName)
         setRoutineName(json.logRoutine)
         setLogExercises(json.logExercises)
-        console.log(json)
       })
       .catch((error) => console.error(error))
   }
 
-  let createLog = () => {
-    let method = creatingLog ? 'POST' : 'PUT'
+  let updateLog = () => {
+    let method = 'PUT'
     let body = {
       "logName": logName,
       "logRoutine": routineName,
       "logExercises": logExercises,
+      "_id": log._id
     }
 
-    if (!creatingLog) {
-      body._id = log._id
-    }
-    console.log(body)
     fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
       method: method,
       headers: {
@@ -63,17 +53,6 @@ const LogScreen = ({ route, navigation }) => {
     .catch((error) => console.error(error))
   }
 
-  let editExercise = (exercise, exerciseIndex) => {
-    const newExercises = logExercises.map((e, i) => {
-      if (i === exerciseIndex) {
-        return exercise
-      } else {
-        return e
-      }
-    })
-    setLogExercises(newExercises)
-  }
-
   let removeExercise = (exerciseIndex) => {
     const newExercises = logExercises.filter((e, i) => i !== exerciseIndex);
     setLogExercises(newExercises)
@@ -81,10 +60,9 @@ const LogScreen = ({ route, navigation }) => {
 
   // Render each exercise
   const exerciseElements = logExercises.map((exercise, index) =>
-    // <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
     <View key={index} style={{ flexDirection: 'row' }}>
       <View style={{flex: 1}}>
-        <ExerciseElement editExercise={editExercise} exerciseIndex={index} exercise={exercise} logId={log._id} navigation={navigation}></ExerciseElement>
+        <ExerciseElement exercise={exercise} logId={log._id} navigation={navigation}></ExerciseElement>
       </View>
       <View>
         <Button
@@ -129,15 +107,15 @@ const LogScreen = ({ route, navigation }) => {
         <View style={{ marginTop: 'auto', flexDirection: 'row', justifyContent: 'space-around' }}>
           <Button
             onPress={() => {
-              navigation.goBack()
+              navigation.navigate("LogList")
             }}
             title='Exit'
           />
           <Button
             onPress={() => {
-              createLog()
+              updateLog()
             }}
-            title={creatingLog ? 'Create Log' : 'Save Log'}
+            title='Save Log'
           />
         </View>
       </View>
@@ -148,16 +126,8 @@ const LogScreen = ({ route, navigation }) => {
 
 const ExerciseElement = (props) => {
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, logId: props.logId, onGoBack: props.editExercise, exerciseIndex: props.exerciseIndex })} style={{ flexDirection: 'row' }}>
-      <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name:</Text>
-      <TextInput
-        style={{ height: 40 }}
-        placeholder="Exercise Name"
-        // onChangeText={newText => {
-        //   props.editExercise({ exerciseName: newText }, props.exerciseIndex)
-        // }}
-        defaultValue={props.exercise.exerciseName}
-      />
+    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, logId: props.logId })} style={{ flexDirection: 'row' }}>
+      <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name: {props.exercise.exerciseName}</Text>
     </TouchableOpacity>
   )
 }
