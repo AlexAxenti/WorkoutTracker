@@ -126,7 +126,7 @@ const LogScreen = ({ route, navigation }) => {
 
 const ExerciseElement = (props) => {
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('Exercise', { exercise: props.exercise, logId: props.logId })} style={{ flexDirection: 'row' }}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('LogExercise', { exercise: props.exercise, logId: props.logId })} style={{ flexDirection: 'row' }}>
       <Text style={{ marginTop: 'auto', marginBottom: 'auto', marginRight: 5 }}>Exercise Name: {props.exercise.exerciseName}</Text>
     </TouchableOpacity>
   )

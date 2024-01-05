@@ -9,7 +9,10 @@ const BotNav = (props) => {
         <Text>Log List</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.botNavButton} onPress={() => props.navigation.navigate('RoutineList')}>
-        <Text>RoutineList</Text>
+        <Text>Routine List</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.botNavButton} onPress={() => props.navigation.navigate('ExerciseList')}>
+        <Text>Exercise List</Text>
       </TouchableOpacity>
     </View>
   )

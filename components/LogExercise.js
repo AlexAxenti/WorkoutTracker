@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import stylesSheet from '../styles.js'
 import BotNav from './BotNav.js'
 
-const ExerciseScreen = ({ route, navigation }) => {
+const LogExerciseScreen = ({ route, navigation }) => {
   const exercise = route.params.exercise
   const logId = route.params.logId
 
@@ -150,4 +150,4 @@ const SetElement = (props) => {
 
 const styles = stylesSheet;
 
-export default ExerciseScreen 
+export default LogExerciseScreen 
