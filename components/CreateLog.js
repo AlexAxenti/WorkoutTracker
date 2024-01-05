@@ -21,13 +21,13 @@ const CreateLogScreen = ({ navigation }) => {
   let createLog = () => {
     let method = 'POST'
     let body = {
-      "logName": value.routineName == 'None' ? '' : value.routineName,
-      "logRoutine": value.routineName == 'None' ? '' : value.routineName
+      "logName": value.routineName == 'None' ? 'None' : value.routineName,
+      "logRoutine": value.routineName == 'None' ? 'None' : value.routineName
     }
 
     console.log(body)
-    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
-    // fetch('http://localhost:7000/logs', {
+    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+    fetch('http://localhost:7000/logs', {
       method: method,
       headers: {
         Accept: 'application/json',
