@@ -1,49 +1,48 @@
 import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import stylesSheet from '../styles.js'
-import BotNav from './BotNav.js';
+import stylesSheet from '../../styles.js'
+import BotNav from '../BotNav.js';
 import { useIsFocused } from '@react-navigation/native';
 
-const ExerciseListScreen = ({ navigation }) => {
-  const [exercises, setExercises] = useState([]);
+const RoutineListScreen = ({ navigation }) => {
+  const [routines, setRoutines] = useState([]);
   const isFocused = useIsFocused();
 
-  let removeExercise = (id) => {
-    setExercises(exercises.filter(exercise => exercise._id !== id))
+  let removeRoutine = (id) => {
+    setRoutines(routines.filter(routine => routine._id !== id))
   }
 
-  const exerciseElements = exercises.map(exercise =>
-    <ExerciseRecord key={exercise._id} exercise={exercise} remove={removeExercise} navigation={navigation}></ExerciseRecord>
+  const routineElements = routines.map(routine =>
+    <RoutineRecord key={routine._id} routine={routine} remove={removeRoutine} navigation={navigation}></RoutineRecord>
   )
 
-  let getExercises = () => {
+  let getRoutines = () => {
     fetch("http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines")
       .then((resp) => resp.json())
-      .then((json) => setExercises(json))
+      .then((json) => setRoutines(json))
       .catch((error) => console.error(error))
   }
 
   useEffect(() => {
-    isFocused && getExercises()
+    isFocused && getRoutines()
   }, [isFocused]);
 
   return (
     <View style={styles.outerScreenLayout}>
       <View style={styles.topNav}>
-        <Text>Exercise List</Text>
+        <Text>Routine List</Text>
       </View>
       <View style={styles.centerContent}>
         <View>
-          {exerciseElements}
+          {routineElements}
         </View>
         <View style={{ marginTop: 'auto' }}>
           <Button
             onPress={() => {
               // logs.push(text)
-              //navigation.navigate('Routine', { routine: {}, creating: true })
-              console.log("Create exercise! :D")
+              navigation.navigate('Routine', { routine: {}, creating: true })
             }}
-            title='Create Exercise'
+            title='Create Routine'
           />
         </View>
       </View>
@@ -52,7 +51,7 @@ const ExerciseListScreen = ({ navigation }) => {
   )
 }
 
-const ExerciseRecord = (props) => {
+const RoutineRecord = (props) => {
   let deleteRoutine = () => {
     fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/routines', {
       method: 'DELETE',
@@ -69,15 +68,14 @@ const ExerciseRecord = (props) => {
   }
 
   return (
-    <TouchableOpacity onPress={() => props.navigation.navigate('Routine', { routine: props.exercise, creating: false, })} style={styles.log}>
+    <TouchableOpacity onPress={() => props.navigation.navigate('Routine', { routine: props.routine, creating: false, })} style={styles.log}>
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View>
-          <Text>{props.exercise.routineName}</Text>
+          <Text>{props.routine.routineName}</Text>
         </View>
         <View style={{ marginLeft: 'auto' }}>
           <Button
-            // onPress={() => { deleteRoutine() }}
-            onPress={() => console.log("Delete exericse! D:")}
+            onPress={() => { deleteRoutine() }}
             title='Delete Routine'
           />
         </View>
@@ -88,4 +86,4 @@ const ExerciseRecord = (props) => {
 
 const styles = stylesSheet;
 
-export default ExerciseListScreen
+export default RoutineListScreen

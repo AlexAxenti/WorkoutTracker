@@ -1,7 +1,7 @@
 import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import stylesSheet from '../styles.js'
-import BotNav from './BotNav.js';
+import stylesSheet from '../../styles.js'
+import BotNav from '../BotNav.js';
 import { useIsFocused } from '@react-navigation/native';
 
 const LogScreen = ({ route, navigation }) => {
