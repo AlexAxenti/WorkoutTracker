@@ -1,0 +1,3 @@
+[submodule "WorkoutTrackerBackend"]
+	path = WorkoutTrackerBackend
+	url = https://github.com/AlexAxenti/WorkoutTrackerBackend

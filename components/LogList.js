@@ -72,7 +72,8 @@ const LogListScreen = ({ navigation }) => {
 
 const LogRecord = (props) => {
   let deleteLog = () => {
-    fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+    // fetch('http://workout-tracker-backend-71ab3f542572.herokuapp.com/logs', {
+    fetch('http://localhost:7000/logs', {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
